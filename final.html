@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StatSphere</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f0f4f8; color: #333; scroll-behavior: smooth; }
+    .gradient-text {
+      background: linear-gradient(90deg, #29b6f6, #8e24aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #29b6f6, #8e24aa);
+    }
+    .card-shadow {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .info-box {
+      background: #fff;
+      border: 2px solid;
+      border-image: linear-gradient(180deg, #29b6f6, #8e24aa) 1;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px rgba(46,49,146,0.15);
+      transition: transform .3s ease;
+    }
+    .info-box:hover { transform: translateY(-4px); }
+    .info-box h3 { color: #29b6f6; }
+    .info-box ul li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: .5rem;
+      color: #555;
+    }
+    .info-box ul li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: .6rem;
+      width: .5rem; height: .5rem;
+      background: #8e24aa;
+      border-radius: 50%;
+    }
+    .header { position: relative; overflow: hidden; }
+    .header::before, .header::after {
+      content: ''; position: absolute; border-radius: 50%; opacity: .3;
+      animation: float 8s ease-in-out infinite;
+    }
+    .header::before {
+      width: 200px; height: 200px; background: #29b6f6;
+      top: -50px; left: -50px;
+    }
+    .header::after {
+      width: 300px; height: 300px; background: #8e24aa;
+      bottom: -100px; right: -100px;
+      animation-duration: 10s;
+    }
+    @keyframes float {
+      0%,100% { transform: translate(0,0); }
+      50%    { transform: translate(20px,20px); }
+    }
+    
+    /* Profile Picture Styles */
+    .profile-pic-container {
+      position: relative; width: 14rem; height: 14rem;
+    }
+    .profile-pic-container img {
+      border-radius: 50%; border: 4px solid #fff;
+      box-shadow: 0 0 15px rgba(46,49,146,0.3);
+      width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1;
+    }
+    .profile-pic-container::before, .profile-pic-container::after {
+      content: ''; position: absolute; border-radius: 50%;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: 2px solid transparent;
+      animation: rotate 6s linear infinite, glow 4s ease-in-out infinite;
+    }
+    .profile-pic-container::before { border-top-color: #29b6f6; }
+    .profile-pic-container::after {
+      border-right-color: #8e24aa;
+      animation-duration: 8s;
+    }
+    @keyframes rotate {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes glow {
+      0%,100% { opacity: .5; filter: blur(0); }
+      50%     { opacity: 1; filter: blur(8px); }
+    }
+
+    /* Section Header Underline */
+    .section-header {
+      position: relative; display: inline-block; padding-bottom: .5rem;
+    }
+    .section-header::after {
+      content: '';
+      position: absolute; left: 50%; bottom: 0;
+      transform: translateX(-50%);
+      width: 60%; height: 4px;
+      background: linear-gradient(90deg, #29b6f6, #8e24aa);
+      border-radius: 2px;
+      animation: underline 2s ease-in-out infinite alternate;
+    }
+    @keyframes underline {
+      0%   { width: 40%; }
+      100% { width: 80%; }
+    }
+    .gradient-fade {
+      background: linear-gradient(90deg, #29b6f6, #8e24aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* --- SLIDESHOW ANIMATION --- */
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-350px * 5)); } /* Moves by width of cards */
+    }
+
+    .reviews-track {
+      display: flex;
+      width: calc(350px * 10); /* Twice the number of cards for seamless looping */
+      animation: scroll 30s linear infinite;
+    }
+
+    .reviews-track:hover {
+      animation-play-state: paused;
+    }
+
+    .review-card {
+      width: 320px; /* Card width */
+      flex-shrink: 0;
+      margin: 0 15px;
+    }
+  </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+  <header class="header py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center relative z-10">
+      <h1 class="text-5xl md:text-6xl font-bold gradient-text mb-4 md:mb-0">StatSphere</h1>
+      <nav class="space-x-6">
+        <a href="#courses" class="text-gray-700 hover:text-gray-900 font-medium">Courses</a>
+        <a href="#profile" class="text-gray-700 hover:text-gray-900 font-medium">About</a>
+        <a href="#reviews" class="text-gray-700 hover:text-gray-900 font-medium">Reviews</a>
+        <a href="#footer" class="text-gray-700 hover:text-gray-900 font-medium">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="courses" class="py-20">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-semibold section-header gradient-fade mb-12">
+        Courses Tailored for Your Success
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
+        <div class="bg-white p-8 rounded-3xl card-shadow transform hover:scale-105 transition border-t-4 border-purple-500">
+          <div class="h-2 w-16 mb-4 gradient-bg rounded"></div>
+          <h3 class="text-2xl font-semibold mb-2 text-purple-600">Artificial Intelligence</h3>
+          <p class="text-gray-600">Class 11, Class 12 CBSE</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl card-shadow transform hover:scale-105 transition border-t-4 border-cyan-500">
+          <div class="h-2 w-16 mb-4 gradient-bg rounded"></div>
+          <h3 class="text-2xl font-semibold mb-2 text-cyan-600">Statistics</h3>
+          <p class="text-gray-600">Class 11, Class 12 for boards, Graduation - standard syllabus of universities.</p>
+        </div>
+      </div>
+
+      <div class="mt-16 mb-10">
+        <h3 class="text-2xl md:text-3xl font-semibold section-header gradient-fade">Higher Statistics</h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <div class="bg-white p-8 rounded-3xl card-shadow transform hover:scale-105 transition flex flex-col border-t-4 border-purple-500">
+          <div class="h-2 w-16 mb-4 gradient-bg rounded"></div>
+          <h3 class="text-2xl font-semibold mb-2 text-purple-600">Bio Statistics</h3>
+          <p class="text-gray-600 mb-4 flex-grow">
+            For medical and Ayurveda students. <br><br>
+            <strong>Important Syllabus:</strong> Clinical Trials, Epidemiology, Survival Analysis, Hypothesis Testing, ANOVA, and Vital Statistics.
+          </p>
+          <div class="mt-auto bg-purple-50 p-3 rounded-xl border border-purple-100">
+            <p class="text-sm text-purple-800 font-medium">
+              * Also providing expert statistical data analysis services for medical and nursing students.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl card-shadow transform hover:scale-105 transition flex flex-col border-t-4 border-cyan-500">
+          <div class="h-2 w-16 mb-4 gradient-bg rounded"></div>
+          <h3 class="text-xl lg:text-2xl font-semibold mb-2 text-cyan-600 whitespace-nowrap">Engineering Mathematics</h3>
+          <p class="text-gray-600 mb-4 flex-grow">
+            For B.Tech, M.Tech, and diploma engineering students. <br><br>
+            <strong>Important Syllabus:</strong> Differential Equations, Linear Algebra, Numerical Methods, Transforms (Laplace &amp; Fourier), Complex Variables, and Probability.
+          </p>
+          <div class="mt-auto bg-cyan-50 p-3 rounded-xl border border-cyan-100">
+            <p class="text-sm text-cyan-800 font-medium">
+              * Focused on practical applications and GATE engineering math preparation.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-3xl card-shadow transform hover:scale-105 transition flex flex-col border-t-4 border-green-500">
+          <div class="h-2 w-16 mb-4 gradient-bg rounded"></div>
+          <h3 class="text-2xl font-semibold mb-2 text-green-600">Statistics for MBA</h3>
+          <p class="text-gray-600 mb-4 flex-grow">
+            For MBA, BBA, and business management professionals. <br><br>
+            <strong>Important Syllabus:</strong> Descriptive Statistics, Probability, Sampling, Hypothesis Testing, Regression, Time Series, and Decision Analysis.
+          </p>
+          <div class="mt-auto bg-green-50 p-3 rounded-xl border border-green-100">
+            <p class="text-sm text-green-800 font-medium">
+              * Includes hands-on business case studies and data-driven decision frameworks.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6 md:flex md:items-center md:space-x-12">
+      <div class="md:w-1/3 mb-8 md:mb-0 flex justify-center">
+        <div class="profile-pic-container">
+          <img src="profile.jpg" alt="Sourav Bera">
+        </div>
+      </div>
+      <div class="md:w-2/3 space-y-6">
+        <h2 class="text-3xl font-bold gradient-text">Sourav Bera</h2>
+        <div class="info-box">
+          <h3 class="text-xl font-semibold mb-4">Education</h3>
+          <ul>
+            <li>Ph.D. Statistics, NIT Bhopal</li>
+            <li>M.Sc. Statistics</li>
+            <li>B.Sc. Statistics, Mathematics &amp; Economics</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <h3 class="text-xl font-semibold mb-4">Experience</h3>
+          <ul>
+            <li>Faculty of Statistics, Bangalore University</li>
+            <li>Assistant Professor, BMS College of Engineering (AI &amp; ML)</li>
+            <li>Biostatistician, SDM Institute of Ayurveda and Hospital</li>
+            <li>Lecturer of Statistics, Sri Aurobindo College &amp; Vijaya PU College</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" class="py-20 bg-gray-50 overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-semibold section-header gradient-fade">Student Success Stories</h2>
+      <p class="text-gray-600 mt-4">Hear from the students who transformed their learning experience with StatSphere.</p>
+    </div>
+
+    <div class="relative">
+      <div class="reviews-track">
+        
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-purple-500">
+          <h4 class="text-xl font-bold text-gray-800">Aarav Sharma</h4>
+          <p class="text-sm font-medium gradient-text mb-4">Class 12 CBSE (AI)</p>
+          <p class="text-gray-600 italic">"The way complex AI concepts were broken down made my board prep so much easier. Highly recommended!"</p>
+        </div>
+
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-cyan-500">
+          <h4 class="text-xl font-bold text-gray-800">Ishani Verma</h4>
+          <p class="text-sm font-medium gradient-text mb-4">3rd Year B.Sc. Statistics</p>
+          <p class="text-gray-600 italic">"Standard university syllabus was covered in depth. The notes on Hypothesis testing were a life-saver."</p>
+        </div>
+
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-green-500">
+          <h4 class="text-xl font-bold text-gray-800">Dr. Rahul Menon</h4>
+          <p class="text-sm font-medium gradient-text mb-4">Medical Research Scholar</p>
+          <p class="text-gray-600 italic">"The data analysis for my nursing project was handled with such precision. Biostatistics is now my favorite subject."</p>
+        </div>
+
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-purple-500">
+          <h4 class="text-xl font-bold text-gray-800">Sanya Gupta</h4>
+          <p class="text-sm font-medium gradient-text mb-4">MBA 1st Year</p>
+          <p class="text-gray-600 italic">"Regression and Time Series were quite daunting, but the practical examples used here made them so clear."</p>
+        </div>
+
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-cyan-500">
+          <h4 class="text-xl font-bold text-gray-800">Vikram Aditya</h4>
+          <p class="text-sm font-medium gradient-text mb-4">B.Tech Mechanical</p>
+          <p class="text-gray-600 italic">"Differential equations and Fourier transforms are no longer a nightmare. Great for engineering students!"</p>
+        </div>
+
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-purple-500">
+          <h4 class="text-xl font-bold text-gray-800">Aarav Sharma</h4>
+          <p class="text-sm font-medium gradient-text mb-4">Class 12 CBSE (AI)</p>
+          <p class="text-gray-600 italic">"The way complex AI concepts were broken down made my board prep so much easier. Highly recommended!"</p>
+        </div>
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-cyan-500">
+          <h4 class="text-xl font-bold text-gray-800">Ishani Verma</h4>
+          <p class="text-sm font-medium gradient-text mb-4">3rd Year B.Sc. Statistics</p>
+          <p class="text-gray-600 italic">"Standard university syllabus was covered in depth. The notes on Hypothesis testing were a life-saver."</p>
+        </div>
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-green-500">
+          <h4 class="text-xl font-bold text-gray-800">Dr. Rahul Menon</h4>
+          <p class="text-sm font-medium gradient-text mb-4">Medical Research Scholar</p>
+          <p class="text-gray-600 italic">"The data analysis for my nursing project was handled with such precision. Biostatistics is now my favorite subject."</p>
+        </div>
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-purple-500">
+          <h4 class="text-xl font-bold text-gray-800">Sanya Gupta</h4>
+          <p class="text-sm font-medium gradient-text mb-4">MBA 1st Year</p>
+          <p class="text-gray-600 italic">"Regression and Time Series were quite daunting, but the practical examples used here made them so clear."</p>
+        </div>
+        <div class="review-card bg-white p-8 rounded-3xl card-shadow border-b-4 border-cyan-500">
+          <h4 class="text-xl font-bold text-gray-800">Vikram Aditya</h4>
+          <p class="text-sm font-medium gradient-text mb-4">B.Tech Mechanical</p>
+          <p class="text-gray-600 italic">"Differential equations and Fourier transforms are no longer a nightmare. Great for engineering students!"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="footer" class="py-8 gradient-bg text-white">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+      <p>&copy; 2025 StatSphere. All rights reserved.</p>
+      <div class="space-x-6 mt-4 md:mt-0">
+        <a href="mailto:statsubhi2023@gmail.com" class="hover:underline">Contact: statsubhi2023@gmail.com</a>
+        <a href="#" class="hover:underline">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
